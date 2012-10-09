@@ -1,4 +1,4 @@
-## MMClass ##
+## What is MMClass ##
 
 MMClass is just another JavaScript Class factory,
 like Class in [Prototype](http://prototypejs.org/learn/class-inheritance),
@@ -7,9 +7,11 @@ like Class in [Prototype](http://prototypejs.org/learn/class-inheritance),
 But it follow the semantics of ES6 max-min class draft,
 so all codes written with MMClass are expected to be compatible with ES6.
 
-### Example ###
-ES 6 syntax:
-```
+## Example ##
+
+### ES 6 syntax: ###
+
+```hx
 Class Pet {
 	constructor(name) {
 		this.name = name
@@ -44,8 +46,9 @@ Class Cat extends Pet {
 }
 ```
 
-ES5 version with MMClass:
-```
+### ES5 version with MMClass: ###
+
+```js
 var Pet = Class({
 	constructor: function(name) {
 		this._name = name
@@ -89,14 +92,18 @@ var cat = new Cat('Garfield')
 cat.speak() // Output: Garfield says... Meow ~~ I'm a cat, go away!
 ```
 
-### Usage ###
+## Usage ##
+
+Note: MMClass requires ES5 environment. You can try es5-shim for legacy browsers (though untested yet).
 
 ### my.js ###
-```
+
+```js
 	'use strict'
 	'import Class from "$PATH_TO/mmclass/src/class.js"'
 	...
 ```
+See [my.js](http://github.com/hax/my.js/) for more info
 
 ### NodeJS ###
 
@@ -104,13 +111,16 @@ Installation:
 ```
 	npm i mmclass
 ```
-```
+
+Source:
+```js
 	var Class = require('mmclass').Class
 	...
 ```
 
 ### AMD / CMD ###
-```
+
+```js
 	define(function(require, exports) {
 		var Class = require('$PATH_TO/mmclass/dist/mmclass').Class
 		...
@@ -119,6 +129,6 @@ Installation:
 
 ### Browser ###
 
-```
+```html
 	<script src="$PATH_TO/mmclass/dist/mmclass">
 ```
