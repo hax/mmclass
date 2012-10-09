@@ -6,7 +6,7 @@ void function(root, factory){
 		// AMD or CMD
 		define(factory)
 	} else {
-		factory(null, root))
+		factory(null, root)
 	}
 }(this, function(_, exports){
 
