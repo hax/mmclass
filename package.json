@@ -1,0 +1,13 @@
+{
+	"name": "mmclass",
+	"version": "0.1.0",
+	"description": "ES6 Max-min Class",
+	"keywords": ["class", "es6", "OO", "extends", "super"],
+	"author": "Hax <johnhax@gmail.com> (http://johnhax.net/)",
+	"homepage": "http://github.com/hax/mmclass",
+	"bugs": "http://github.com/hax/mmclass/issues",
+	"repository": {
+		"type": "git",
+		"url": "http://github.com/hax/mmclass.git"
+	}
+}
