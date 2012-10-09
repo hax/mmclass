@@ -91,6 +91,13 @@ cat.speak() // Output: Garfield says... Meow ~~ I'm a cat, go away!
 
 ### Usage ###
 
+### my.js ###
+```
+	'use strict'
+	'import Class from "$PATH/mmclass/src/class.js"'
+	...
+```
+
 ### NodeJS ###
 
 Installation:
@@ -98,5 +105,18 @@ Installation:
 	npm i mmclass
 ```
 ```
-	var Class = require('mmclass')
+	var Class = require('mmclass').Class
+	...
 ```
+
+### AMD / CMD ###
+```
+	define(function(require, exports) {
+		var Class = require('$PATH/mmclass/dist/mmclass').Class
+		...
+	}
+```
+
+### Browser ###
+
+TODO
