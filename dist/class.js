@@ -6,10 +6,9 @@ void function(root, factory){
 		// AMD or CMD
 		define(factory)
 	} else {
-		var lookup = root['my:lookup']
-		factory(lookup, lookup('./trans.lms'))
+		factory(null, root))
 	}
-}(this, function(require, exports){
+}(this, function(_, exports){
 
 // ES5 Class util as ES6 max-min class semantics
 // See: http://wiki.ecmascript.org/doku.php?id=strawman:maximally_minimal_classes
