@@ -1,8 +1,21 @@
+void function(root, factory){
+	if (typeof require === 'function' && typeof exports === 'object' && exports) {
+		// CommonJS Module/1.0+
+		factory(require, exports)
+	} else if (typeof define === 'function' && (define.amd || define.cmd)) {
+		// AMD or CMD
+		define(factory)
+	} else {
+		var lookup = root['my:lookup']
+		factory(lookup, lookup('./trans.lms'))
+	}
+}(this, function(require, exports){
+
 // ES5 Class util as ES6 max-min class semantics
 // See: http://wiki.ecmascript.org/doku.php?id=strawman:maximally_minimal_classes
 
 'use strict'
-exports: Class
+exports.Class = Class
 
 function Class(methods) {
 	if (arguments.length === 0) return function(){}
@@ -129,3 +142,5 @@ support $this
 
 Object.augment
 */
+
+})

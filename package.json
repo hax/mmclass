@@ -1,7 +1,8 @@
 {
 	"name": "mmclass",
-	"version": "0.1.0",
-	"description": "ES6 Max-min Class",
+	"version": "0.1.1",
+	"main": "dist/class.js",
+	"description": "ES5 Class util which follow the semantics of ES6 max-min class",
 	"keywords": ["class", "es6", "OO", "extends", "super"],
 	"author": "Hax <johnhax@gmail.com> (http://johnhax.net/)",
 	"homepage": "http://github.com/hax/mmclass",

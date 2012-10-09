@@ -19,7 +19,7 @@ assert.instanceOf = function(x, y, message) {
 	assert.ok(x instanceof y, message)
 }
 
-var Class = require('../src/class').Class
+var Class = require('../dist/class').Class
 
 before(function(){
 	this.assert = assert
