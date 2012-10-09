@@ -11,7 +11,7 @@ so all codes written with MMClass are expected to be compatible with ES6.
 
 ### ES 6 syntax: ###
 
-```hx
+```coffee-script
 Class Pet {
 	constructor(name) {
 		this.name = name
@@ -99,9 +99,9 @@ Note: MMClass requires ES5 environment. You can try es5-shim for legacy browsers
 ### my.js ###
 
 ```js
-	'use strict'
-	'import Class from "$PATH_TO/mmclass/src/class.js"'
-	...
+'use strict'
+'import Class from "$PATH_TO/mmclass/src/class.js"'
+...
 ```
 See [my.js](http://github.com/hax/my.js/) for more info
 
@@ -109,26 +109,26 @@ See [my.js](http://github.com/hax/my.js/) for more info
 
 Installation:
 ```
-	npm i mmclass
+npm i mmclass
 ```
 
 Source:
 ```js
-	var Class = require('mmclass').Class
-	...
+var Class = require('mmclass').Class
+...
 ```
 
 ### AMD / CMD ###
 
 ```js
-	define(function(require, exports) {
-		var Class = require('$PATH_TO/mmclass/dist/mmclass').Class
-		...
-	}
+define(function(require, exports) {
+	var Class = require('$PATH_TO/mmclass/dist/mmclass').Class
+	...
+}
 ```
 
 ### Browser ###
 
 ```html
-	<script src="$PATH_TO/mmclass/dist/mmclass">
+<script src="$PATH_TO/mmclass/dist/mmclass">
 ```
