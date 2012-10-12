@@ -37,11 +37,11 @@ function createClass(methods, proto, superclass) {
 			var pd = Object.getOwnPropertyDescriptor(methods, name)
 			if ('value' in pd) {
 				if (typeof pd.value === 'function')
-					pd.value = createMethod(pd.value)
+					pd.value = createMethod(name, pd.value, proto)
 				else throw TypeError('[' + name + '] is not a function')
 			} else {
-				if (pd.get) pd.get = createMethod(pd.get)
-				if (pd.set) pd.set = createMethod(pd.set)
+				if (pd.get) pd.get = createMethod(name, pd.get, proto)
+				if (pd.set) pd.set = createMethod(name, pd.set, proto)
 			}
 			pd.enumerable = false
 			methodDescriptors[name] = pd
@@ -84,12 +84,12 @@ function inherit(obj, proto) {
 var f = function(){}
 var toFunctionSource = f.toSource || f.toString
 
-function createMethod(func, isConstructor) {
+function createMethod(name, func, proto, isConstructor) {
 	var params = /\((.*?)\)/.exec(toFunctionSource.call(func))[1].split(/\s*,\s*/)
 	var method
 	if (params[0] === '$super') method = function() {
 		var args = [].slice.call(arguments)
-		args.unshift(createSuper(this))
+		args.unshift(createSuper(this, proto))
 		return func.apply(this, args)
 	}
 	else method = func
@@ -98,7 +98,7 @@ function createMethod(func, isConstructor) {
 }
 
 function createSuper(self, parent) {
-	if (parent === undefined) parent = Object.getPrototypeOf(Object.getPrototypeOf(self))
+	if (parent === undefined) parent = Object.prototype
 	if (parent === null) return null
 
 	var $super = parent.constructor.bind(self)
