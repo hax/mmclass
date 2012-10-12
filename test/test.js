@@ -125,8 +125,16 @@ test('super call', function(){
 			return this._desc
 		},
 		toString: function($super) {
-			return $super.getName() + ': ' + this.getDesc()
+			return $super.toString() + ': ' + this.getDesc()
 		}
+	})
+	var C = Class.extend(B)({
+		constructor: function($super, name, desc) {
+			$super(name, desc)
+		},
+		/*getName: function($super) {
+			return '[' + $super.getName() + ']'
+		}*/
 	})
 
 	var b = new B('test', 'Hello world!')
@@ -135,4 +143,12 @@ test('super call', function(){
 	assert.egal(b.getName(), 'test')
 	assert.egal(b.getDesc(), 'Hello world!')
 	assert.egal(b.toString(), 'test: Hello world!')
+
+	var c = new C('test', 'Hello world!')
+	assert.instanceOf(c, C)
+	assert.instanceOf(c, B)
+	assert.instanceOf(c, A)
+	//assert.egal(c.getName(), '[test]')
+	//assert.egal(c.getDesc(), 'Hello world!')
+	//assert.egal(c.toString(), '[test]: Hello world!')
 })

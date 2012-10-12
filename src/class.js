@@ -8,7 +8,7 @@ function Class(methods) {
 	if (arguments.length === 0) return function(){}
 	return createClass(methods)
 }
-Class.extend = function(obj) {
+Class.extend = function(obj, props) {
 	var proto, superclass
 	if (obj === null) {
 		proto = null
@@ -24,8 +24,14 @@ Class.extend = function(obj) {
 			break
 		default: throw TypeError('obj should be an object or null')
 	}
+	var pds = {}
+	if (props !== undefined)
+		for (var names = Object.getOwnPropertyNames(props), i = 0; i < names.length; i++) {
+			var name = names[i]
+			pds[name] = Object.getOwnPropertyDescriptor(props, name)
+		}
 	return function(methods) {
-		return createClass(methods, proto, superclass)
+		return createClass(methods, Object.create(proto, pds), superclass)
 	}
 }
 
@@ -55,11 +61,10 @@ function createClass(methods, proto, superclass) {
 		Ctor = function(){}
 		methodDescriptors.constructor = {value: Ctor, writable: true, configurable: true}
 	}
-	if (arguments.length > 1) Ctor.prototype = Object.create(proto, methodDescriptors)
-	else Object.defineProperties(Ctor.prototype, methodDescriptors)
+	if (arguments.length > 1) Ctor.prototype = proto
+	Object.defineProperties(Ctor.prototype, methodDescriptors)
 	Object.defineProperties(Ctor, {
 		prototype: {writable: false, configurable: false, enumerable: false},
-		__super__: {value: superclass},
 	})
 	if (superclass) inherit(Ctor, superclass)
 	return Ctor
