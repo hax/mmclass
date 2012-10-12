@@ -8,21 +8,21 @@ function Class(methods) {
 	if (arguments.length === 0) return function(){}
 	return createClass(methods)
 }
-Class.extend = function(obj, props) {
-	var proto, superclass
-	if (obj === null) {
-		proto = null
-	} else switch (typeof obj) {
-		case 'function':
-			if (typeof obj.prototype === 'object' || obj.prototype === null) {
-				proto = obj.prototype
-				superclass = obj
-			} else throw TypeError('obj.prototype should be an object or null')
+Class.extend = function(superclass, props) {
+	var protoParent, constructorParent
+	if (superclass === null) {
+		protoParent = null
+	} else switch (typeof superclass) {
+		case 'function': // TODO: should be constructor
+			if (typeof superclass.prototype === 'object' || superclass.prototype === null) {
+				protoParent = superclass.prototype
+				constructorParent = superclass
+			} else throw TypeError('superclass.prototype should be an object or null')
 			break
 		case 'object':
-			proto = obj
+			protoParent = superclass
 			break
-		default: throw TypeError('obj should be an object or null')
+		default: throw TypeError('superclass should be an object or null')
 	}
 	var pds = {}
 	if (props !== undefined)
@@ -31,23 +31,24 @@ Class.extend = function(obj, props) {
 			pds[name] = Object.getOwnPropertyDescriptor(props, name)
 		}
 	return function(methods) {
-		return createClass(methods, Object.create(proto, pds), superclass)
+		return createClass(methods, protoParent, pds, constructorParent)
 	}
 }
 
-function createClass(methods, proto, superclass) {
+function createClass(methods, protoParent, protoPDs, constructorParent) {
 	var methodDescriptors = {}
+	if (arguments.length <= 1) protoParent = Object.prototype
 	if (methods !== undefined) {
 		for (var names = Object.getOwnPropertyNames(methods), i = 0; i < names.length; i++) {
 			var name = names[i]
 			var pd = Object.getOwnPropertyDescriptor(methods, name)
 			if ('value' in pd) {
 				if (typeof pd.value === 'function')
-					pd.value = createMethod(name, pd.value, proto)
+					pd.value = createMethod(name, pd.value, protoParent)
 				else throw TypeError('[' + name + '] is not a function')
 			} else {
-				if (pd.get) pd.get = createMethod(name, pd.get, proto)
-				if (pd.set) pd.set = createMethod(name, pd.set, proto)
+				if (pd.get) pd.get = createMethod('get ' + name, pd.get, protoParent)
+				if (pd.set) pd.set = createMethod('set ' + name, pd.set, protoParent)
 			}
 			pd.enumerable = false
 			methodDescriptors[name] = pd
@@ -58,15 +59,17 @@ function createClass(methods, proto, superclass) {
 		Ctor = methodDescriptors.constructor.value
 		if (Ctor === undefined) throw TypeError('constructor is not a function')
 	} else {
-		Ctor = function(){}
+		Ctor = function constructor() {
+			if (protoParent !== null) protoParent.constructor.apply(this, arguments)
+		}
 		methodDescriptors.constructor = {value: Ctor, writable: true, configurable: true}
 	}
-	if (arguments.length > 1) Ctor.prototype = proto
+	if (arguments.length > 1) Ctor.prototype = Object.create(protoParent, protoPDs)
 	Object.defineProperties(Ctor.prototype, methodDescriptors)
 	Object.defineProperties(Ctor, {
 		prototype: {writable: false, configurable: false, enumerable: false},
 	})
-	if (superclass) inherit(Ctor, superclass)
+	if (constructorParent) inherit(Ctor, constructorParent)
 	return Ctor
 }
 
@@ -89,40 +92,62 @@ function inherit(obj, proto) {
 var f = function(){}
 var toFunctionSource = f.toSource || f.toString
 
-function createMethod(name, func, proto, isConstructor) {
+function createMethod(name, func, base) {
 	var params = /\((.*?)\)/.exec(toFunctionSource.call(func))[1].split(/\s*,\s*/)
 	var method
 	if (params[0] === '$super') method = function() {
 		var args = [].slice.call(arguments)
-		args.unshift(createSuper(this, proto))
+		args.unshift(createSuper(this, base, name))
 		return func.apply(this, args)
 	}
 	else method = func
-	//if (!isConstructor) method = method
 	return method
 }
 
-function createSuper(self, parent) {
-	if (parent === undefined) parent = Object.prototype
-	if (parent === null) return null
+function createSuper(actualThis, base, name) {
+	if (base === null) return null
 
-	var $super = parent.constructor.bind(self)
+	// TODO: via Proxy?
+	var Super = function() {
+		return base[name].apply(actualThis, arguments)
+	}
+	Super.call = function(name) {
+		[].shift.call(arguments)
+		return base[name].apply(actualThis, arguments)
+	}
+	Super.get = function(name) {
+		var p = base, get
+		while (!(get = Object.getOwnPropertyDescriptor(p, name).get))
+			p = Object.getPrototypeOf(p)
+		return get.apply(actualThis)
+	}
+	Super.set = function(name, value) {
+		var p = base, set
+		while (!(set = Object.getOwnPropertyDescriptor(p, name).set))
+			p = Object.getPrototypeOf(p)
+		return set.apply(actualThis, [value])
+	}
+	inherit(Super, createSuperProto(actualThis, base))
+	return Super
+}
+
+function createSuperProto(actualThis, base) {
+	if (base === null) return null
 	var pds = {}
-	for (var names = Object.getOwnPropertyNames(parent), i = 0; i < names.length; i++) {
+	for (var names = Object.getOwnPropertyNames(base), i = 0; i < names.length; i++) {
 		var name = names[i]
-		var pd = Object.getOwnPropertyDescriptor(parent, name)
+		var pd = Object.getOwnPropertyDescriptor(base, name)
 		if ('value' in pd) {
 			pd.value = typeof pd.value === 'function' ?
-				pd.value.bind(self) : pd.value
+				pd.value.bind(actualThis) : pd.value
 		} else {
-			if (pd.get) pd.get = pd.get.bind(self)
-			if (pd.set) pd.set = pd.set.bind(self)
+			if (pd.get) pd.get = pd.get.bind(actualThis)
+			if (pd.set) pd.set = pd.set.bind(actualThis)
 		}
 		pds[name] = pd
 	}
-	Object.defineProperties($super, pds)
-	inherit($super, createSuper(self, Object.getPrototypeOf(parent)))
-	return $super
+	var proto = createSuperProto(actualThis, Object.getPrototypeOf(base))
+	return Object.create(proto, pds)
 }
 
 /*

@@ -10,27 +10,21 @@ var Pet = Class({
 })
 
 var Dog = Class.extend(Pet)({
-	constructor: function($super, name) {
-		$super(name)
-	},
 	woof: function() {
 		return 'Woof, woof!'
 	},
 	speak: function($super) {
-		$super.speak()
+		$super()
 		console.log(this.woof() + " I'm a dog, pet me!")
 	}
 })
 
 var Cat = Class.extend(Pet)({
-	constructor: function($super, name) {
-		$super(name)
-	},
 	meow: function() {
 		return 'Meow ~~'
 	},
 	speak: function($super) {
-		$super.speak()
+		$super()
 		console.log(this.meow() + " I'm a cat, go away!")
 	}
 })
