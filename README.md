@@ -115,7 +115,7 @@ var Dog = Class.extend(Pet)({...})
 
 Note: As ES6, Dog.[[prototype]] should be Pet so that Dog class can inherit
 all "static" properties on Pet. MMClass follow this semantic via setting
-__proto__ . Most engines support this pseudo property, if it's not supported,
+\_\_proto\_\_ . Most engines support this pseudo property, if it's not supported,
 MMClass will copy all properties.
 
 ### You also can extend an object directly (aka. prototype-based inheritance) ###
