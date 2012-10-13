@@ -11,13 +11,13 @@ so all codes written with MMClass are expected to be compatible with ES6.
 
 ### ES 6 syntax: ###
 
-```coffee-script
+```js
 Class Pet {
 	constructor(name) {
-		this.name = name
+		this._name = name
 	}
 	speak() {
-		console.log(this.name + ' says...')
+		console.log(this._name + ' says...')
 	}
 }
 Class Dog extends Pet {
@@ -33,14 +33,11 @@ Class Dog extends Pet {
 	}
 }
 Class Cat extends Pet {
-	constructor(name) {
-		super(name)
-	}
 	meow() {
 		return 'Meow ~~'
 	}
 	speak() {
-		super.speak()
+		super()
 		console.log(this.meow() + " I'm a cat, go away!")
 	}
 }
@@ -72,14 +69,13 @@ var Dog = Class.extend(Pet)({
 })
 
 var Cat = Class.extend(Pet)({
-	constructor: function($super, name) {
-		$super(name)
-	},
+	// if no constructor provided,
+	// default to constructor(...args) { super(...args) }
 	meow: function() {
 		return 'Meow ~~'
 	},
 	speak: function($super) {
-		$super.speak()
+		$super() // same as $super.speak()
 		console.log(this.meow() + " I'm a cat, go away!")
 	}
 })
@@ -92,9 +88,80 @@ var cat = new Cat('Garfield')
 cat.speak() // Output: Garfield says... Meow ~~ I'm a cat, go away!
 ```
 
+## More info about ES6 Class/ES5 MMClass ##
+
+### You can extend a traditional ES5 constructor function ###
+
+```js
+function Pet(name) {
+	this._name = name
+}
+Pet.prototype.speak = function() {
+	console.log(this._name + ' says...')
+}
+```
+
+ES6:
+
+```js
+class Dog extends Pet {...}
+```
+
+MMClass:
+
+```js
+var Dog = Class.extend(Pet)({...})
+```
+
+Note: As ES6, Dog.[[prototype]] should be Pet so that Dog class can inherit
+all "static" properties on Pet. MMClass follow this semantic via setting
+__proto__ . Most engines support this pseudo property, if it's not supported,
+MMClass will copy all properties.
+
+### You also can extend an object directly (aka. prototype-based inheritance) ###
+
+```js
+var pet = {
+	constructor: function(name) {
+		this._name = name
+	},
+	speak: function() {
+		console.log(this._name + ' says...')
+	}
+}
+```
+
+ES6:
+
+```js
+class Dog extends pet {...}
+```
+
+MMClass:
+
+```js
+var Dog = Class.extend(pet)({...})
+```
+
+### You even can extend null to avoid inheriting the properties from Object.prototype (such as isPrototypeOf/hasOwnProperty/propertyIsEnumerable) ###
+
+ES6:
+
+```js
+class NakedObject extends null {}
+```
+
+MMClass:
+
+```js
+var NakedObject = Class.extend(null)()
+```
+
+###
+
 ## Usage ##
 
-Note: MMClass requires ES5 environment. You can try es5-shim for legacy browsers (though untested yet).
+**Note:** MMClass requires ES5 environment. You can try _es5-shim_ for legacy browsers (though untested yet).
 
 ### my.js ###
 
@@ -132,3 +199,8 @@ define(function(require, exports) {
 ```html
 <script src="$PATH_TO/mmclass/dist/mmclass">
 ```
+
+## TODO ##
+
+* Check the recent released ES6 draft to follow the changes
+(the standard draft is changing dramatically...)
