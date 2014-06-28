@@ -1,4 +1,4 @@
-var assert = require('assert')
+assert = require('assert')
 assert.egal = function(actual, expect, message) {
 	message = (message ? message + ': ' : '') +
 		'expect ' + expect + ' but actual ' + actual
@@ -19,9 +19,4 @@ assert.instanceOf = function(x, y, message) {
 	assert.ok(x instanceof y, message)
 }
 
-var Class = require('../dist/class').Class
-
-before(function(){
-	this.assert = assert
-	this.Class = Class
-})
+Class = require('../dist/class').Class

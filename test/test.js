@@ -1,10 +1,3 @@
-var assert
-var Class
-
-before(function(){
-	assert = this.assert
-	Class = this.Class
-})
 
 test('class {}', function(){
 	var Test = Class()
@@ -36,7 +29,9 @@ test('class { constructor(){}; method(){}; }', function(){
 	assert.instanceOf(hax, Test)
 	assert.egal(hax.getName(), 'hax')
 	assert.egal(Object.getPrototypeOf(hax), Test.prototype)
-	assert.egal(Object.getOwnPropertyDescriptor(Test.prototype, 'getName').enumerable, false)
+	if (!legacy) {
+		assert.egal(Object.getOwnPropertyDescriptor(Test.prototype, 'getName').enumerable, false)
+	}
 	//assert.throws(function(){ new hax.getName() }, TypeError)
 })
 
@@ -84,6 +79,7 @@ test('class extends proto {}', function(){
 
 	assert.isFunction(Test)
 	assert.egal(Object.getPrototypeOf(Test), Function.prototype)
+	console.log('ok')
 	assert.egal(Object.getPrototypeOf(Test.prototype), proto)
 	assert.egal(Test.prototype.constructor, Test)
 	assert.instanceOf(new Test(), Test)
@@ -112,7 +108,7 @@ test('super call', function(){
 		getName: function() {
 			return this._name
 		},
-		toString: function($super) {
+		toString: function() {
 			return this.getName()
 		}
 	})
@@ -125,7 +121,7 @@ test('super call', function(){
 			return this._desc
 		},
 		toString: function($super) {
-			return $super.toString() + ': ' + this.getDesc()
+			return $super() + ': ' + this.getDesc()
 		}
 	})
 	var C = Class.extend(B)({
@@ -148,4 +144,8 @@ test('super call', function(){
 	assert.egal(c.getName(), '[test]')
 	assert.egal(c.getDesc(), 'Hello world!')
 	assert.egal(c.toString(), '[test]: Hello world!')
+})
+
+test('class { static method() }', function(){
+	var A = Class.statics
 })
