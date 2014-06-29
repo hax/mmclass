@@ -4,7 +4,11 @@
 <meta charset="utf-8">
 <title>Testing mmclass</title>
 <link rel="stylesheet" href="../node_modules/mocha/mocha.css">
+<!--[if lt IE 9]>
 <script src="../node_modules/es5-shim/es5-shim.min.js"></script>
+<script src="../node_modules/better-es5-shim/object/index.js"></script>
+<script>var legacy = true</script>
+<![endif]-->
 <script src="../node_modules/mocha/mocha.js"></script>
 <script src="../node_modules/assert/assert.js"></script>
 <script>
@@ -31,202 +35,9 @@ assert.instanceOf = function(x, y, message) {
 </script>
 </head>
 <body>
-<script>
-var legacy = true
-
-var _objProto = Object.prototype 
-var _isPrototypeOf = _objProto.isPrototypeOf
-var _hasOwnProperty = _objProto.hasOwnProperty
-
-var sampleObj = {}
-
-if (_isPrototypeOf.call(sampleObj, sampleObj)) { // IE 8-
-	_objProto.isPrototypeOf = function isPrototypeOf(object) {
-		return _isPrototypeOf.call(this, object) && object !== this
-	}
-}
-
-
-if (!Object.getPrototypeOf) {
-	Object.getPrototypeOf = function getPrototypeOf(obj) {
-		
-		if (Object(obj) !== obj) throw new TypeError('Object.getPrototypeOf called on non-object')
-		
-		var p = obj.__proto__
-		if (p === null) return null
-		if (Object(p) === p && _objProto.isPrototypeOf.call(p, obj)) return p
-		
-		p = checkConstructor(obj)
-		if (p) return p
-
-		var pd = Object.getOwnPropertyDescriptor(obj, 'constructor')
-		if (pd && pd.configurable) {
-			delete obj.constructor
-			p = checkConstructor(obj)
-			Object.defineProperty(obj, 'constructor', pd)
-			if (p) return p
-		}
-
-		if (obj instanceof Object) return _objProto
-
-		return null
-	}
-
-	function checkConstructor(obj) {
-		var ctor = obj.constructor
-		if (Object(ctor) === ctor) { // IE 8+ weird: typeof Element === 'object'
-			try {
-				if (obj instanceof ctor) return ctor.prototype
-			} catch (e) {}
-		}
-	}
-}
-
-if (!Object.getOwnPropertyNames) {
-	Object.getOwnPropertyNames = getOwnPropertyNames
-} else {
-	try {
-		Object.getOwnPropertyNames({}, '')
-	} catch (e) {
-		var _getOwnPropertyNames = Object.getOwnPropertyNames
-		Object.getOwnPropertyNames =  function (obj) {
-			if (obj.nodeType)
-				return _getOwnPropertyNames(obj)
-			else
-				return getOwnPropertyNames(obj)
-		}
-	}
-}
-
-function getOwnPropertyNames(obj) {
-	var names = []
-	for (var key in obj) {
-		if (obj.hasOwnProperty(key)) names.push(key)
-	}
-	return names
-}
-
-if (!Object.getOwnPropertyDescriptor) {
-	Object.getOwnPropertyDescriptor = getOwnPropertyDescriptor
-} else {
-	try {
-		Object.getOwnPropertyDescriptor({}, '')
-	} catch (e) {
-		var _getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor
-		Object.getOwnPropertyDescriptor = getOwnPropertyDescriptor
-	}
-}
-
-function getOwnPropertyDescriptor(obj, name) {
-	if (Object(obj) !== obj) throw new TypeError('Object.getOwnPropertyDescriptor called on non-object')
-	if (!_hasOwnProperty.call(obj, name)) return undefined
-	if (obj.nodeType) {
-		return _getOwnPropertyDescriptor(obj, name)
-	}
-	return {value: obj[name], writable: true, enumerable: true, configurable: true}
-}
-
-if (!Object.create) {
-	var nuke
-	try {
-		var iframe = document.createElement('iframe')
-		iframe.style.display = 'none'
-		;(document.body || document.documentElement).appendChild(iframe)
-		iframe.src = 'javascript:'
-		iframe.contentWindow.document.close()
-		nuke = iframe.contentWindow.Object.prototype
-		iframe.parentNode.removeChild(iframe);
-		iframe = null
-	} catch (e) {
-
-	}
-	delete nuke.constructor
-	delete nuke.hasOwnProperty
-	delete nuke.propertyIsEnumerable
-	delete nuke.isPrototypeOf
-	delete nuke.toLocaleString
-	delete nuke.toString
-	delete nuke.valueOf
-	nuke.__proto__ = null
-
-	Object.create = function create(proto, pds) {
-		function Ctor() {}
-		Ctor.prototype = proto === null ? nuke : proto
-		var result = new Ctor()
-		result.__proto__ = proto
-		Object.defineProperties(result, pds)
-		return result
-	}
-}
-
-if (!Object.defineProperties) {
-	Object.defineProperties = defineProperties
-} else {
-	try {
-		Object.defineProperties({}, {})
-	} catch (e) {
-		var _defineProperties = Object.defineProperties
-		Object.defineProperties = function (obj, pds) {
-			if (obj.nodeType)
-				return _defineProperties(obj, pds)
-			else
-				return defineProperties(obj, pds)
-		}
-	}
-}
-
-function defineProperties(obj, pds) {
-	for (var key in pds) {
-		if (pds.propertyIsEnumerable(key)) {
-			var pd = pds[key]
-			if (pd.value !== undefined) {
-				obj[key] = pd.value
-			}
-			
-			if (typeof pd.get === 'function') {
-				obj.__defineGetter__(key, pd.get)
-			}
-			if (typeof pd.set === 'function') {
-				obj.__defineSetter__(key, pd.get)
-			}
-		}
-	}
-}
-
-
-if (!Object.defineProperty) {
-	Object.defineProperty = defineProperty
-} else {
-	try {
-		Object.defineProperty({}, 'test', {})
-	} catch (e) {
-		var _defineProperty = Object.defineProperty
-		Object.defineProperty = function (obj, name, pd) {
-			if (obj.nodeType)
-				return _defineProperty(obj, name, pd)
-			else
-				return defineProperty(obj, name, pd)
-		}
-	}
-}
-
-function defineProperty(obj, name, pd) {
-	if (pd.value !== undefined) {
-		obj[name] = pd.value
-	}
-	
-	if (typeof pd.get === 'function') {
-		obj.__defineGetter__(name, pd.get)
-	}
-	if (typeof pd.set === 'function') {
-		obj.__defineSetter__(name, pd.get)
-	}
-}
-</script>
 	<div id="mocha"></div>
 	<script src="../dist/class.js"></script>
 	<script src="test.js"></script>
 	<script>mocha.run()</script>
-
 </body>
 </html>

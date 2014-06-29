@@ -1,21 +1,30 @@
 {
-	"name": "mmclass",
-	"version": "0.2.0",
-	"main": "dist/class.js",
-	"scripts": {
-		"test": "./node_modules/mocha/bin/mocha"
-	},
-	"description": "ES5 Class util which follow the semantics of ES6 max-min class",
-	"keywords": ["class", "es6", "OO", "extends", "super"],
-	"author": "Hax <johnhax@gmail.com> (http://johnhax.net/)",
-	"homepage": "http://github.com/hax/mmclass",
-	"bugs": "http://github.com/hax/mmclass/issues",
-	"repository": {
-		"type": "git",
-		"url": "http://github.com/hax/mmclass.git"
-	},
-	"devDependencies": {
-		"mocha": "~1.14",
-		"my": "~0.3"
-	}
+  "name": "mmclass",
+  "version": "0.2.0",
+  "main": "dist/class.js",
+  "scripts": {
+    "test": "./node_modules/mocha/bin/mocha"
+  },
+  "description": "ES5 Class util which follow the semantics of ES6 max-min class",
+  "keywords": [
+    "class",
+    "es6",
+    "OO",
+    "extends",
+    "super"
+  ],
+  "author": "Hax <johnhax@gmail.com> (http://johnhax.net/)",
+  "homepage": "http://github.com/hax/mmclass",
+  "bugs": "http://github.com/hax/mmclass/issues",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/hax/mmclass.git"
+  },
+  "devDependencies": {
+    "assert": "Jxck/assert",
+    "better-es5-shim": "^0.1.0",
+    "es5-shim": "^3.4.0",
+    "mocha": "~1.14",
+    "my": "~0.3"
+  }
 }

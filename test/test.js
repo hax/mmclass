@@ -29,9 +29,7 @@ test('class { constructor(){}; method(){}; }', function(){
 	assert.instanceOf(hax, Test)
 	assert.egal(hax.getName(), 'hax')
 	assert.egal(Object.getPrototypeOf(hax), Test.prototype)
-	if (!legacy) {
-		assert.egal(Object.getOwnPropertyDescriptor(Test.prototype, 'getName').enumerable, false)
-	}
+	//assert.egal(Object.getOwnPropertyDescriptor(Test.prototype, 'getName').enumerable, false)
 	//assert.throws(function(){ new hax.getName() }, TypeError)
 })
 
@@ -79,7 +77,6 @@ test('class extends proto {}', function(){
 
 	assert.isFunction(Test)
 	assert.egal(Object.getPrototypeOf(Test), Function.prototype)
-	console.log('ok')
 	assert.egal(Object.getPrototypeOf(Test.prototype), proto)
 	assert.egal(Test.prototype.constructor, Test)
 	assert.instanceOf(new Test(), Test)
