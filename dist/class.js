@@ -79,7 +79,7 @@ function createClass(methods, protoParent, protoPDs, constructorParent) {
 	if (arguments.length > 1) Ctor.prototype = Object.create(protoParent, protoPDs)
 	Object.defineProperties(Ctor.prototype, methodDescriptors)
 	Object.defineProperties(Ctor, {
-		prototype: {writable: false, configurable: false, enumerable: false},
+		prototype: {writable: false, configurable: false, enumerable: false}
 	})
 	if (constructorParent) inherit(Ctor, constructorParent)
 	return Ctor
