@@ -2,7 +2,7 @@
 // See: http://wiki.ecmascript.org/doku.php?id=strawman:maximally_minimal_classes
 
 'use strict'
-exports: Class
+'export {Class}'
 
 function Class(methods) {
 	if (arguments.length === 0) return function(){}
