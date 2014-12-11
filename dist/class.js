@@ -1,3 +1,7 @@
+/* mmclass -- ES5 Class util which follow the semantics of ES6 max-min class
+ * v0.3.0 2014-12-11T10:07:46.977Z
+ * Author: Hax <johnhax@gmail.com> (http://johnhax.net/)
+ */
 void function(root, factory){
 	if (typeof require === 'function' && typeof exports === 'object' && exports) {
 		// CommonJS Module/1.0+
