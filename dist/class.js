@@ -86,9 +86,10 @@ function createClass(methods, protoParent, protoPDs, constructorParent) {
 }
 
 var _isPrototypeOf = {}.isPrototypeOf
-function inherit(obj, proto) {
-	if (!('__proto__' in {})) { // copy all properties from proto
-		var pds = {}
+var inherit = supportSetProto() ?
+	function (obj, proto) { obj.__proto__ = proto } :
+	function (obj, proto) {
+		// copy all properties from proto
 		while (proto !== null && !_isPrototypeOf.call(proto, obj)) { // stop if obj has the same prototype
 			for (var names = Object.getOwnPropertyNames(proto), i = 0; i < names.length; i++) {
 				var name = names[i]
@@ -99,7 +100,13 @@ function inherit(obj, proto) {
 			proto = Object.getPrototypeOf(proto)
 		}
 	}
-	obj.__proto__ = proto
+
+function supportSetProto() {
+	var x = {}
+	x.__proto__ = C.prototype
+	return x instanceof C
+	
+	function C() {}
 }
 
 var f = function(){}
