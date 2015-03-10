@@ -109,7 +109,7 @@ function supportSetProto() {
 	var x = {}
 	x.__proto__ = C.prototype
 	return x instanceof C
-	
+
 	function C() {}
 }
 
@@ -117,7 +117,7 @@ var f = function(){}
 var toFunctionSource = f.toSource || f.toString
 
 function createMethod(name, func, base) {
-	var params = /\((.*?)\)/.exec(toFunctionSource.call(func))[1].split(/\s*,\s*/)
+	var params = /\(([\s\S]*?)\)/.exec(toFunctionSource.call(func))[1].split(/\s*,\s*/)
 	var method
 	if (params[0] === '$super') method = function() {
 		var args = [].slice.call(arguments)
