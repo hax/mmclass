@@ -1,5 +1,5 @@
 /* mmclass -- ES5 Class util which follow the semantics of ES6 max-min class
- * v0.3.0 2014-12-11T10:07:46.977Z
+ * v0.4.1 2015-03-11T06:11:44.993Z
  * Author: Hax <johnhax@gmail.com> (http://johnhax.net/)
  */
 void function(root, factory){
@@ -183,5 +183,6 @@ support $this
 
 Object.augment
 */
+
 
 })
