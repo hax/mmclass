@@ -2,7 +2,7 @@
 // See: http://wiki.ecmascript.org/doku.php?id=strawman:maximally_minimal_classes
 
 'use strict'
-exports: Class
+'export {Class}'
 
 function Class(methods) {
 	if (arguments.length === 0) return function(){}
@@ -67,16 +67,18 @@ function createClass(methods, protoParent, protoPDs, constructorParent) {
 	if (arguments.length > 1) Ctor.prototype = Object.create(protoParent, protoPDs)
 	Object.defineProperties(Ctor.prototype, methodDescriptors)
 	Object.defineProperties(Ctor, {
-		prototype: {writable: false, configurable: false, enumerable: false},
+		prototype: {writable: false, configurable: false, enumerable: false}
 	})
 	if (constructorParent) inherit(Ctor, constructorParent)
 	return Ctor
 }
 
-function inherit(obj, proto) {
-	if (!('__proto__' in {})) { // copy all properties from proto
-		var pds = {}
-		while (proto !== null && !proto.isPrototypeOf(obj)) { // stop if obj has the same prototype
+var _isPrototypeOf = {}.isPrototypeOf
+var inherit = supportSetProto() ?
+	function (obj, proto) { obj.__proto__ = proto } :
+	function (obj, proto) {
+		// copy all properties from proto
+		while (proto !== null && !_isPrototypeOf.call(proto, obj)) { // stop if obj has the same prototype
 			for (var names = Object.getOwnPropertyNames(proto), i = 0; i < names.length; i++) {
 				var name = names[i]
 				if (!obj.hasOwnProperty(name))
@@ -86,14 +88,20 @@ function inherit(obj, proto) {
 			proto = Object.getPrototypeOf(proto)
 		}
 	}
-	obj.__proto__ = proto
+
+function supportSetProto() {
+	var x = {}
+	x.__proto__ = C.prototype
+	return x instanceof C
+
+	function C() {}
 }
 
 var f = function(){}
 var toFunctionSource = f.toSource || f.toString
 
 function createMethod(name, func, base) {
-	var params = /\((.*?)\)/.exec(toFunctionSource.call(func))[1].split(/\s*,\s*/)
+	var params = /\(([\s\S]*?)\)/.exec(toFunctionSource.call(func))[1].split(/\s*,\s*/)
 	var method
 	if (params[0] === '$super') method = function() {
 		var args = [].slice.call(arguments)

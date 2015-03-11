@@ -1,8 +1,9 @@
 {
   "name": "mmclass",
-  "version": "0.3.0",
+  "version": "0.4.1",
   "main": "dist/class.js",
   "scripts": {
+    "dist": "node build",
     "test": "mocha"
   },
   "description": "ES5 Class util which follow the semantics of ES6 max-min class",

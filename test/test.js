@@ -143,6 +143,25 @@ test('super call', function(){
 	assert.egal(c.toString(), '[test]: Hello world!')
 })
 
-test('class { static method() }', function(){
+/*test('class { static method() }', function(){
 	var A = Class.statics
+})*/
+
+test('#1 multi-line constructor/method parameters', function () {
+
+	var Test = Class({
+		constructor: function (	a,
+			b,
+			c) {
+		},
+		test: function
+			(	a,
+				b,
+				c) {
+		}
+	})
+
+	assert.egal(Test.length, 3)
+	assert.egal(Test.prototype.test.length, 3)
+	
 })

@@ -1,3 +1,7 @@
+/* mmclass -- ES5 Class util which follow the semantics of ES6 max-min class
+ * v0.4.1 2015-03-11T06:11:44.993Z
+ * Author: Hax <johnhax@gmail.com> (http://johnhax.net/)
+ */
 void function(root, factory){
 	if (typeof require === 'function' && typeof exports === 'object' && exports) {
 		// CommonJS Module/1.0+
@@ -86,9 +90,10 @@ function createClass(methods, protoParent, protoPDs, constructorParent) {
 }
 
 var _isPrototypeOf = {}.isPrototypeOf
-function inherit(obj, proto) {
-	if (!('__proto__' in {})) { // copy all properties from proto
-		var pds = {}
+var inherit = supportSetProto() ?
+	function (obj, proto) { obj.__proto__ = proto } :
+	function (obj, proto) {
+		// copy all properties from proto
 		while (proto !== null && !_isPrototypeOf.call(proto, obj)) { // stop if obj has the same prototype
 			for (var names = Object.getOwnPropertyNames(proto), i = 0; i < names.length; i++) {
 				var name = names[i]
@@ -99,14 +104,20 @@ function inherit(obj, proto) {
 			proto = Object.getPrototypeOf(proto)
 		}
 	}
-	obj.__proto__ = proto
+
+function supportSetProto() {
+	var x = {}
+	x.__proto__ = C.prototype
+	return x instanceof C
+
+	function C() {}
 }
 
 var f = function(){}
 var toFunctionSource = f.toSource || f.toString
 
 function createMethod(name, func, base) {
-	var params = /\((.*?)\)/.exec(toFunctionSource.call(func))[1].split(/\s*,\s*/)
+	var params = /\(([\s\S]*?)\)/.exec(toFunctionSource.call(func))[1].split(/\s*,\s*/)
 	var method
 	if (params[0] === '$super') method = function() {
 		var args = [].slice.call(arguments)
@@ -172,5 +183,6 @@ support $this
 
 Object.augment
 */
+
 
 })
