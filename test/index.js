@@ -1,5 +1,5 @@
 /* eslint-env node */
-'use strict'
+/* eslint strict: 0 */
 /* global assert:true */
 assert = require('assert')
 assert.egal = function(actual, expect, message) {
