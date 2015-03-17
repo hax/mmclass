@@ -1,0 +1,15 @@
+---
+  env:
+    node: true
+
+  rules:
+    semi: never
+    quotes: single avoid-escape
+    no-use-before-define: nofunc
+    curly: 2 multi-line
+    no-underscore-dangle: 0
+    no-comma-dangle: 0
+    new-parens: 0
+    no-unused-vars: 1
+    no-spaced-func: 1
+    key-spacing: 1 align colon
