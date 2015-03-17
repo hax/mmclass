@@ -1,3 +1,7 @@
-example
+node_modules
+dist
 coverage
+example
+examples
 sandbox
+umd.js
