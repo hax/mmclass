@@ -4,7 +4,8 @@
   "main": "dist/class.js",
   "scripts": {
     "dist": "node build",
-    "test": "mocha"
+    "test": "mocha",
+    "coveralls": "istanbul cover _mocha && istanbul-coveralls"
   },
   "description": "ES5 Class util which follow the semantics of ES6 max-min class",
   "keywords": [
@@ -25,6 +26,8 @@
     "assert": "Jxck/assert",
     "better-es5-shim": "^0.1.0",
     "es5-shim": "^3.4.0",
+    "istanbul": "^0.3.8",
+    "istanbul-coveralls": "^1.0.2",
     "mocha": "~1.14",
     "my": "~0.3"
   }
