@@ -220,5 +220,5 @@ define(function(require, exports) {
 [coveralls-image]: https://img.shields.io/coveralls/hax/mmclass/master.svg?style=flat-square
 [coveralls-url]: https://coveralls.io/r/hax/mmclass?branch=master
 [downloads-image]: http://img.shields.io/npm/dm/mmclass.svg?style=flat-square
-[codacy-image]: https://img.shields.io/codacy/12ebe2ff5dd0429ca51c78b69955a4ad.svg?style=flat-square
+[codacy-image]: https://img.shields.io/codacy/4ce5706252da43709594735f4728ad83.svg?style=flat-square
 [codacy-url]: https://www.codacy.com/public/hax/mmclass
