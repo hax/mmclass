@@ -1,10 +1,13 @@
+/* eslint-env node */
+
 'use strict'
 
 var pack = require('./package')
 var fs = require('fs')
+var path = require('path')
 
-var umd = fs.readFileSync(__dirname + '/umd.js', 'utf-8')
-var src = fs.readFileSync(__dirname + '/src/class.js', 'utf-8')
+var umd = fs.readFileSync(path.join(__dirname, 'umd.js'), 'utf-8')
+var src = fs.readFileSync(path.join(__dirname, 'src', 'class.js'), 'utf-8')
 
 src = src.replace("'export {Class}'", 'exports.Class = Class')
 
@@ -15,4 +18,4 @@ var result = umd
 	})
 	.replace('//$content$', src)
 
-fs.writeFileSync(__dirname + '/dist/class.js', result)
+fs.writeFileSync(path.join(__dirname, 'dist', 'class.js'), result)

@@ -1,3 +1,4 @@
+'use strict'
 
 test('class {}', function(){
 	var Test = Class()
@@ -153,15 +154,17 @@ test('#1 multi-line constructor/method parameters', function () {
 		constructor: function (	a,
 			b,
 			c) {
+				return [a, b, c]
 		},
 		test: function
 			(	a,
 				b,
 				c) {
+					return [a, b, c]
 		}
 	})
 
 	assert.egal(Test.length, 3)
 	assert.egal(Test.prototype.test.length, 3)
-	
+
 })

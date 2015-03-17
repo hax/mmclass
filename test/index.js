@@ -1,3 +1,6 @@
+/* eslint-env node */
+'use strict'
+/* global assert:true */
 assert = require('assert')
 assert.egal = function(actual, expect, message) {
 	message = (message ? message + ': ' : '') +
@@ -19,4 +22,5 @@ assert.instanceOf = function(x, y, message) {
 	assert.ok(x instanceof y, message)
 }
 
+/* global Class:true */
 Class = require('../dist/class').Class
