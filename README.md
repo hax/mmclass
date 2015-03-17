@@ -197,7 +197,7 @@ define(function(require, exports) {
 ### Browser ###
 
 ```html
-<script src="$PATH_TO/mmclass/dist/mmclass">
+<script src="$PATH_TO/mmclass/dist/mmclass"></script>
 ```
 
 ## TODO ##
