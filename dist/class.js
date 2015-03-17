@@ -1,5 +1,5 @@
 /* mmclass -- ES5 Class util which follow the semantics of ES6 max-min class
- * v0.4.1 2015-03-11T06:11:44.993Z
+ * v0.4.2 2015-03-17T15:23:29.838Z
  * Author: Hax <johnhax@gmail.com> (http://johnhax.net/)
  */
 void function(root, factory){
@@ -33,12 +33,12 @@ Class.extend = function(superclass, props) {
 			if (typeof superclass.prototype === 'object' || superclass.prototype === null) {
 				protoParent = superclass.prototype
 				constructorParent = superclass
-			} else throw TypeError('superclass.prototype should be an object or null')
+			} else throw new TypeError('superclass.prototype should be an object or null')
 			break
 		case 'object':
 			protoParent = superclass
 			break
-		default: throw TypeError('superclass should be an object or null')
+		default: throw new TypeError('superclass should be an object or null')
 	}
 	var pds = {}
 	if (props !== undefined)
@@ -61,7 +61,7 @@ function createClass(methods, protoParent, protoPDs, constructorParent) {
 			if ('value' in pd) {
 				if (typeof pd.value === 'function')
 					pd.value = createMethod(name, pd.value, protoParent)
-				else throw TypeError('[' + name + '] is not a function')
+				else throw new TypeError('[' + name + '] is not a function')
 			} else {
 				if (pd.get) pd.get = createMethod('get ' + name, pd.get, protoParent)
 				if (pd.set) pd.set = createMethod('set ' + name, pd.set, protoParent)
@@ -73,7 +73,7 @@ function createClass(methods, protoParent, protoPDs, constructorParent) {
 	var Ctor
 	if (methodDescriptors.hasOwnProperty('constructor')) {
 		Ctor = methodDescriptors.constructor.value
-		if (Ctor === undefined) throw TypeError('constructor is not a function')
+		if (Ctor === undefined) throw new TypeError('constructor is not a function')
 	} else {
 		Ctor = function constructor() {
 			if (protoParent !== null) protoParent.constructor.apply(this, arguments)
@@ -128,12 +128,12 @@ function createMethod(name, func, base) {
 	return method
 }
 
-function createSuper(actualThis, base, name) {
+function createSuper(actualThis, base, methodName) {
 	if (base === null) return null
 
 	// TODO: via Proxy?
 	var Super = function() {
-		return base[name].apply(actualThis, arguments)
+		return base[methodName].apply(actualThis, arguments)
 	}
 	Super.call = function(name) {
 		[].shift.call(arguments)
