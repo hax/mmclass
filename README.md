@@ -44,7 +44,7 @@ Class Cat extends Pet {
 		return 'Meow ~~'
 	}
 	speak() {
-		super()
+		super.speak()
 		console.log(this.meow() + " I'm a cat, go away!")
 	}
 }
@@ -82,7 +82,7 @@ var Cat = Class.extend(Pet)({
 		return 'Meow ~~'
 	},
 	speak: function($super) {
-		$super() // same as $super.speak()
+		$super.speak()
 		console.log(this.meow() + " I'm a cat, go away!")
 	}
 })
