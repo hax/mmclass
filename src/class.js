@@ -12,28 +12,47 @@ Class.extend = function(superclass, props) {
 	var protoParent, constructorParent
 	if (superclass === null) {
 		protoParent = null
-	} else switch (typeof superclass) {
-		case 'function': // TODO: should be constructor
-			if (typeof superclass.prototype === 'object' || superclass.prototype === null) {
-				protoParent = superclass.prototype
-				constructorParent = superclass
-			} else throw new TypeError('superclass.prototype should be an object or null')
-			break
-		case 'object':
-			protoParent = superclass
-			break
-		default: throw new TypeError('superclass should be an object or null')
+	} else {
+		switch (typeof superclass) {
+			case 'function': // TODO: should be constructor
+				if (typeof superclass.prototype === 'object' || superclass.prototype === null) {
+					protoParent = superclass.prototype
+					constructorParent = superclass
+				} else throw new TypeError('superclass.prototype should be an object or null')
+				break
+			case 'object':
+				protoParent = superclass
+				break
+			default: throw new TypeError('superclass should be an object or null')
+		}
 	}
 	var pds = {}
-	if (props !== undefined)
+	if (props !== undefined) {
 		for (var names = Object.getOwnPropertyNames(props), i = 0; i < names.length; i++) {
 			var name = names[i]
 			pds[name] = Object.getOwnPropertyDescriptor(props, name)
 		}
+	}
 	return function(methods) {
 		return createClass(methods, protoParent, pds, constructorParent)
 	}
 }
+
+var _isPrototypeOf = {}.isPrototypeOf
+var inherit = supportSetProto() ?
+	function (obj, proto) { obj.__proto__ = proto } :
+	function (obj, proto) {
+		// copy all properties from proto
+		while (proto !== null && !_isPrototypeOf.call(proto, obj)) { // stop if obj has the same prototype
+			for (var names = Object.getOwnPropertyNames(proto), i = 0; i < names.length; i++) {
+				var name = names[i]
+				if (!obj.hasOwnProperty(name)) {
+					Object.defineProperty(obj, name, Object.getOwnPropertyDescriptor(proto, name))
+				}
+			}
+			proto = Object.getPrototypeOf(proto)
+		}
+	}
 
 function createClass(methods, protoParent, protoPDs, constructorParent) {
 	var methodDescriptors = {}
@@ -43,9 +62,9 @@ function createClass(methods, protoParent, protoPDs, constructorParent) {
 			var name = names[i]
 			var pd = Object.getOwnPropertyDescriptor(methods, name)
 			if ('value' in pd) {
-				if (typeof pd.value === 'function')
+				if (typeof pd.value === 'function') {
 					pd.value = createMethod(name, pd.value, protoParent)
-				else throw new TypeError('[' + name + '] is not a function')
+				} else throw new TypeError('[' + name + '] is not a function')
 			} else {
 				if (pd.get) pd.get = createMethod('get ' + name, pd.get, protoParent)
 				if (pd.set) pd.set = createMethod('set ' + name, pd.set, protoParent)
@@ -73,22 +92,6 @@ function createClass(methods, protoParent, protoPDs, constructorParent) {
 	return Ctor
 }
 
-var _isPrototypeOf = {}.isPrototypeOf
-var inherit = supportSetProto() ?
-	function (obj, proto) { obj.__proto__ = proto } :
-	function (obj, proto) {
-		// copy all properties from proto
-		while (proto !== null && !_isPrototypeOf.call(proto, obj)) { // stop if obj has the same prototype
-			for (var names = Object.getOwnPropertyNames(proto), i = 0; i < names.length; i++) {
-				var name = names[i]
-				if (!obj.hasOwnProperty(name))
-					Object.defineProperty(obj, name,
-						Object.getOwnPropertyDescriptor(proto, name))
-			}
-			proto = Object.getPrototypeOf(proto)
-		}
-	}
-
 function supportSetProto() {
 	var x = {}
 	x.__proto__ = C.prototype
@@ -103,12 +106,13 @@ var toFunctionSource = f.toSource || f.toString
 function createMethod(name, func, base) {
 	var params = /\(([\s\S]*?)\)/.exec(toFunctionSource.call(func))[1].split(/\s*,\s*/)
 	var method
-	if (params[0] === '$super') method = function() {
-		var args = [].slice.call(arguments)
-		args.unshift(createSuper(this, base, name))
-		return func.apply(this, args)
-	}
-	else method = func
+	if (params[0] === '$super') {
+		method = function() {
+			var args = [].slice.call(arguments)
+			args.unshift(createSuper(this, base, name))
+			return func.apply(this, args)
+		}
+	} else method = func
 	return method
 }
 
@@ -125,14 +129,16 @@ function createSuper(actualThis, base, methodName) {
 	}
 	Super.get = function(name) {
 		var p = base, get
-		while (!(get = Object.getOwnPropertyDescriptor(p, name).get))
+		while (!(get = Object.getOwnPropertyDescriptor(p, name).get)) {
 			p = Object.getPrototypeOf(p)
+		}
 		return get.apply(actualThis)
 	}
 	Super.set = function(name, value) {
 		var p = base, set
-		while (!(set = Object.getOwnPropertyDescriptor(p, name).set))
+		while (!(set = Object.getOwnPropertyDescriptor(p, name).set)) {
 			p = Object.getPrototypeOf(p)
+		}
 		return set.apply(actualThis, [value])
 	}
 	inherit(Super, createSuperProto(actualThis, base))

@@ -2,13 +2,11 @@
   rules:
     semi: [2, never]
     quotes: [2, single, avoid-escape]
+    strict: [2, global]
+    global-strict: 0
     no-use-before-define: [2, nofunc]
     curly: [2, multi-line]
     no-underscore-dangle: 0
-    no-comma-dangle: 0
-    new-parens: 0
     no-proto: 0
-    global-strict: 0
     no-constant-condition: 1
-    no-spaced-func: 1
     new-cap: [2, capIsNew: false]

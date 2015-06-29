@@ -53,10 +53,11 @@ test('class extends Super {}', function(){
 	var Test = Class.extend(Super)()
 
 	assert.isFunction(Test)
-	if ('__proto__' in function(){})
+	if ('__proto__' in function(){}) {
 		assert.egal(Object.getPrototypeOf(Test), Super)
-	else
+	} else {
 		assert.egal(Test.className, 'Super')
+	}
 
 	assert.egal(Object.getPrototypeOf(Test.prototype), Super.prototype)
 	assert.egal(Test.prototype.constructor, Test)
