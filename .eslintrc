@@ -1,9 +1,9 @@
 ---
   rules:
-    semi: never
-    quotes: single avoid-escape
-    no-use-before-define: nofunc
-    curly: 2 multi-line
+    semi: [2, never]
+    quotes: [2, single, avoid-escape]
+    no-use-before-define: [2, nofunc]
+    curly: [2, multi-line]
     no-underscore-dangle: 0
     no-comma-dangle: 0
     new-parens: 0
@@ -11,7 +11,4 @@
     global-strict: 0
     no-constant-condition: 1
     no-spaced-func: 1
-    key-spacing: 1 align colon
-    new-cap:
-      - 2
-      - capIsNew: false
+    new-cap: [2, capIsNew: false]
