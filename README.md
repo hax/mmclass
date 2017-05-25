@@ -7,6 +7,8 @@
 
 ## What is MMClass ##
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/hax/mmclass.svg)](https://greenkeeper.io/)
+
 MMClass is just another JavaScript Class factory,
 like Class in [Prototype](http://prototypejs.org/learn/class-inheritance),
 [MooTools](http://mootools.net/docs/core/Class/Class) or
