@@ -3,11 +3,9 @@
 [![Test coverage][coveralls-image]][coveralls-url]
 [![Codacy badge][codacy-image]][codacy-url]
 [![Downloads][downloads-image]][npm-url]
-
+[![Greenkeeper badge](https://badges.greenkeeper.io/hax/mmclass.svg)](https://greenkeeper.io/)
 
 ## What is MMClass ##
-
-[![Greenkeeper badge](https://badges.greenkeeper.io/hax/mmclass.svg)](https://greenkeeper.io/)
 
 MMClass is just another JavaScript Class factory,
 like Class in [Prototype](http://prototypejs.org/learn/class-inheritance),
