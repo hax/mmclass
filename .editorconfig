@@ -12,3 +12,6 @@ max_line_length = 80
 [{package.json, *.yml, *.yaml}]
 indent_style = space
 indent_size = 2
+
+[*.{markdown, md}]
+indent_size = 4
